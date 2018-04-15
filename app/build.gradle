@@ -26,6 +26,12 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
+    // CardView
+    implementation 'com.android.support:cardview-v7:27.1.1'
+
+    // OkHttp http client
+    implementation 'com.squareup.okhttp3:okhttp:3.7.0'
+
     // Picasso image download and caching
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
