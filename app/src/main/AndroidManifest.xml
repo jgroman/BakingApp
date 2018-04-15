@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cz.jtek.bakingapp">
 
+    <!-- Permission used for checking if network connection exists -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Permission to access network -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".BakingAppApplication"
         android:label="@string/app_name"
@@ -12,7 +18,11 @@
         android:theme="@style/AppTheme"
         >
 
-        <activity android:name=".ui.MainActivity">
+        <activity
+            android:name=".ui.MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
