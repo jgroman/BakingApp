@@ -51,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     // AsyncTaskLoader
     private static final int LOADER_ID_RECIPE_LIST = 0;
 
+    // Arguments bundle keys
+    public static final String BUNDLE_RECIPE_LIST = "recipe-list";
+
     // Instance state bundle keys
     private static final String KEY_RECIPE_LIST = "recipe-list";
 
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
             mRecipeList = savedInstanceState.getParcelableArrayList(KEY_RECIPE_LIST);
         }
         else {
+
             // Using loader to obtain recipe list
             if (NetworkUtils.isNetworkAvailable(this)) {
                 // Initialize recipe list loader
@@ -116,6 +120,16 @@ public class MainActivity extends AppCompatActivity {
                     else {
                         // Valid results received
                         mRecipeList = data.getResult();
+
+                        RecipeListFragment recipeListFragment = new RecipeListFragment();
+
+                        Bundle fragmentBundle = new Bundle();
+                        fragmentBundle.putParcelableArrayList(BUNDLE_RECIPE_LIST, mRecipeList);
+
+                        // Add fragments to detail fragment container
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.detail_container, recipeListFragment)
+                                .commit();
 
                         //mMovieGridAdapter.setMovieData(mTmdbMovieList);
                         //showMovieDataView();
