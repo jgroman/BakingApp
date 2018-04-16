@@ -68,7 +68,14 @@ public class Recipe implements Parcelable {
     public void setImage(String image) { this.mImage = image; }
 
     // Default constructor
-    Recipe() {}
+    private Recipe() {
+        mId = 0;
+        mName = null;
+        mIngredients = new ArrayList<Ingredient>();
+        mSteps = new ArrayList<Step>();
+        mServings = 0;
+        mImage = null;
+    }
 
     // Constructor converting JSON object to this class instance
     private static Recipe fromJson(JSONObject jsonObject) throws JSONException {

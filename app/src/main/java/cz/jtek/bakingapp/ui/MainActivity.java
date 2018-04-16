@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.d(TAG, "onCreate: ");
+        
         mContext = this;
 
         if (savedInstanceState != null) {
@@ -121,14 +123,15 @@ public class MainActivity extends AppCompatActivity {
                         // Valid results received
                         mRecipeList = data.getResult();
 
-                        RecipeListFragment recipeListFragment = new RecipeListFragment();
-
                         Bundle fragmentBundle = new Bundle();
                         fragmentBundle.putParcelableArrayList(BUNDLE_RECIPE_LIST, mRecipeList);
 
-                        // Add fragments to detail fragment container
+                        RecipeListFragment recipeListFragment = new RecipeListFragment();
+                        recipeListFragment.setArguments(fragmentBundle);
+
+                        // Add recipe list fragment to main activity fragment container
                         getSupportFragmentManager().beginTransaction()
-                                .add(R.id.detail_container, recipeListFragment)
+                                .add(R.id.recipe_list_fragment_container, recipeListFragment)
                                 .commit();
 
                         //mMovieGridAdapter.setMovieData(mTmdbMovieList);
@@ -189,11 +192,11 @@ public class MainActivity extends AppCompatActivity {
         public AsyncTaskResult<ArrayList<Recipe>> loadInBackground() {
             try {
                 // Example mock request used for debugging to avoid sending network queries
-                // String jsonMovies = MockDataUtils.getMockJson(getContext(), "baking");
+                String jsonRecipes = MockDataUtils.getMockJson(getContext(), "baking");
 
                 // Load recipe list JSON
-                URL recipesUrl = UdacityApi.buildRecipesUrl();
-                String jsonRecipes = NetworkUtils.getResponseFromHttpUrl(recipesUrl);
+                //URL recipesUrl = UdacityApi.buildRecipesUrl();
+                //String jsonRecipes = NetworkUtils.getResponseFromHttpUrl(recipesUrl);
 
                 UdacityApi.UdacityJsonResult<ArrayList<Recipe>> recipeResult =
                         UdacityApi.getRecipesFromJson(jsonRecipes);

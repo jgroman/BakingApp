@@ -16,11 +16,10 @@
      limitations under the License.
 -->
 
-<!-- Master fragment  -->
-<fragment
+<!-- Recipe List Fragment Container -->
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/master_list_fragment"
-    android:name="cz.jtek.bakingapp.ui.RecipeListFragment"
+    android:id="@+id/recipe_list_fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     />

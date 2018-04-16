@@ -37,7 +37,7 @@ public class MockDataUtils {
      * @param inputStream    Input stream
      * @return File contents
      */
-    private static String readFile(InputStream inputStream) {
+    private static String readFile(InputStream inputStream) throws IOException {
         StringBuilder sb = new StringBuilder();
         int readLen;
 
@@ -51,7 +51,7 @@ public class MockDataUtils {
         } catch (IOException ex) {
             Log.e(TAG, "IOException reading file.");
             ex.printStackTrace();
-            return "";
+            throw ex;
         }
 
         return sb.toString();
@@ -66,7 +66,8 @@ public class MockDataUtils {
      * @return File contents
      */
     @SuppressWarnings("unused")
-    public static String getMockJson(Context context, String fileName) {
+    public static String getMockJson(Context context, String fileName) throws IOException {
+
         InputStream inputStream = context.getResources().openRawResource(
                 context.getResources().getIdentifier(fileName, "raw", context.getPackageName())
         );
