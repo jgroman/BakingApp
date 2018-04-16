@@ -23,18 +23,22 @@
     android:orientation="vertical"
     >
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_recipe_ingredients"
+    <TextView
+        android:id="@+id/tv_ingredient_item_quantity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
-    </android.support.v7.widget.RecyclerView>
+        />
 
-    <ListView
-        android:id="@+id/lv_recipe_steps"
+    <TextView
+        android:id="@+id/tv_ingredient_item_measure"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
-    </ListView>
+        />
+
+    <TextView
+        android:id="@+id/tv_ingredient_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
 </LinearLayout>
-

@@ -22,9 +22,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import cz.jtek.bakingapp.R;
 import cz.jtek.bakingapp.model.Recipe;
@@ -36,6 +39,8 @@ public class RecipeOverviewFragment extends Fragment {
 
     private Context mContext;
     private Recipe mRecipe;
+
+    private RecyclerView.LayoutManager mLayoutManager;
 
     // Instance State bundle keys
     private static final String KEY_RECIPE = "recipe";
@@ -68,6 +73,15 @@ public class RecipeOverviewFragment extends Fragment {
             }
         }
 
+        RecyclerView ingredientsRecyclerView = rootView.findViewById(R.id.rv_recipe_ingredients);
+        ingredientsRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(mContext);
+        ingredientsRecyclerView.setLayoutManager(mLayoutManager);
+
+        IngredientListAdapter adapter = new IngredientListAdapter(mRecipe.getIngredients());
+        ingredientsRecyclerView.setAdapter(adapter);
 
         return rootView;
     }

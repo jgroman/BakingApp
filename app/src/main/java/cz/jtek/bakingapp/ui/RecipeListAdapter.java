@@ -24,9 +24,10 @@ public class RecipeListAdapter
         void onClick(int position);
     }
 
+    private final RecipeListOnClickListener mClickListener;
+
     private Context mContext;
     private ArrayList<Recipe> mRecipeList;
-    private final RecipeListOnClickListener mClickListener;
 
     RecipeListAdapter(Context context, ArrayList<Recipe> recipeList, RecipeListOnClickListener clickListener) {
         mContext = context;

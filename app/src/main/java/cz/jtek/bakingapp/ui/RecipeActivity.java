@@ -28,9 +28,9 @@ public class RecipeActivity extends AppCompatActivity {
             Intent startingIntent = getIntent();
             if (startingIntent == null) { return; }
 
-            if (startingIntent.hasExtra(MainActivity.EXTRA_RECIPE)) {
-                Recipe recipe = startingIntent.getParcelableExtra(MainActivity.EXTRA_RECIPE);
-            }
+            //if (startingIntent.hasExtra(MainActivity.EXTRA_RECIPE)) {
+            //    Recipe recipe = startingIntent.getParcelableExtra(MainActivity.EXTRA_RECIPE);
+            //}
 
             // Create recipe overview fragment
             RecipeOverviewFragment overviewFragment = new RecipeOverviewFragment();

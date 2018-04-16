@@ -136,7 +136,9 @@ public class Recipe implements Parcelable {
     private Recipe(Parcel in) {
         mId = in.readInt();
         mName = in.readString();
+        if (mIngredients == null) { mIngredients = new ArrayList<>(); }
         in.readTypedList(mIngredients, Ingredient.CREATOR);
+        if (mSteps == null) { mSteps = new ArrayList<>(); }
         in.readTypedList(mSteps, Step.CREATOR);
         mServings = in.readInt();
         mImage = in.readString();
