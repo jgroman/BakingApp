@@ -18,6 +18,7 @@
         android:theme="@style/AppTheme"
         >
 
+        <!-- MainActivity - app entry point -->
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name"
@@ -28,6 +29,17 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <!-- RecipeActivity - single recipe overview + step details -->
+        <activity
+            android:name=".ui.RecipeActivity"
+            android:parentActivityName=".ui.MainActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity"
+                />
         </activity>
 
         <!-- Widget receiver -->

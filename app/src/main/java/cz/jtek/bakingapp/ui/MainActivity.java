@@ -17,6 +17,7 @@
 package cz.jtek.bakingapp.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -39,15 +40,17 @@ import cz.jtek.bakingapp.utils.MockDataUtils;
 import cz.jtek.bakingapp.utils.NetworkUtils;
 import cz.jtek.bakingapp.utils.NetworkUtils.AsyncTaskResult;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements RecipeListFragment.OnRecipeClickListener {
 
     @SuppressWarnings("unused")
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private Context mContext;
     private ArrayList<Recipe> mRecipeList;
 
-    private Context mContext;
-
+    private boolean mIsTabletLayout;
+    
     // AsyncTaskLoader
     private static final int LOADER_ID_RECIPE_LIST = 0;
 
@@ -57,14 +60,18 @@ public class MainActivity extends AppCompatActivity {
     // Instance state bundle keys
     private static final String KEY_RECIPE_LIST = "recipe-list";
 
+    // Extras keys
+    static final String EXTRA_RECIPE = "recipe";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.d(TAG, "onCreate: ");
-        
         mContext = this;
+        
+        // Detecting tablet layout based on value from dimens.xml
+        mIsTabletLayout = getResources().getBoolean(R.bool.is_tablet_layout);
 
         if (savedInstanceState != null) {
             // Retrieving recipe list
@@ -123,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                         // Valid results received
                         mRecipeList = data.getResult();
 
+                        // Set recipe list as fragment argument
                         Bundle fragmentBundle = new Bundle();
                         fragmentBundle.putParcelableArrayList(BUNDLE_RECIPE_LIST, mRecipeList);
 
@@ -134,9 +142,6 @@ public class MainActivity extends AppCompatActivity {
                                 .add(R.id.recipe_list_fragment_container, recipeListFragment)
                                 .commit();
 
-                        //mMovieGridAdapter.setMovieData(mTmdbMovieList);
-                        //showMovieDataView();
-
                         // Destroy this loader, otherwise is gets called again during onResume
                         getSupportLoaderManager().destroyLoader(LOADER_ID_RECIPE_LIST);
                     }
@@ -147,6 +152,19 @@ public class MainActivity extends AppCompatActivity {
                     // Not used
                 }
             };
+
+    /**
+     * Recipe list item click callback
+     * Bundles clicked Recipe into extras and starts RecipeActivity
+     *
+     * @param position Clicked Recipe item position in recipe list
+     */
+    @Override
+    public void onRecipeSelected(int position) {
+        Intent intent = new Intent(this, RecipeActivity.class);
+        intent.putExtra(EXTRA_RECIPE, mRecipeList.get(position));
+        startActivity(intent);
+    }
 
     /**
      * Recipe list async task loader implementation

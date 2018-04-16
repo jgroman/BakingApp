@@ -42,17 +42,42 @@ public class RecipeListFragment extends Fragment
     @SuppressWarnings("unused")
     private static final String TAG = RecipeListFragment.class.getSimpleName();
 
-    private Context mContext;
-    private ArrayList<Recipe> mRecipeList;
+    // Custom OnRecipeClickListener interface, must be implemented by container activity
+    public interface OnRecipeClickListener {
+        void onRecipeSelected(int position);
+    }
 
+    // This is a callback to onRecipeSelected in container activity
+    OnRecipeClickListener mRecipeClickListenerCallback;
+
+    private Context mContext;
+    private boolean mIsTabletLayout;
+    private ArrayList<Recipe> mRecipeList;
     private RecyclerView mRecipeListRecyclerView;
 
     private GridLayoutManager mLayoutManager;
+    private static final int COLUMNS_LAYOUT_PHONE = 1;
+    private static final int COLUMNS_LAYOUT_TABLET = 3;
 
     // Instance State bundle keys
     private static final String KEY_RECIPE_LIST = "recipe-list";
 
     public RecipeListFragment() {}
+
+    // Overriding onAttach to make sure that the container activity has implemented the callback
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // This makes sure that the host activity has implemented the callback interface
+        // If not, it throws an exception
+        try {
+            mRecipeClickListenerCallback = (OnRecipeClickListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnRecipeClickListener");
+        }
+    }
 
     @Nullable
     @Override
@@ -79,9 +104,14 @@ public class RecipeListFragment extends Fragment
             }
         }
 
+        // Detecting tablet layout based on value from dimens.xml
+        mIsTabletLayout = getResources().getBoolean(R.bool.is_tablet_layout);
+
+        int layoutColumns = (mIsTabletLayout) ? COLUMNS_LAYOUT_TABLET : COLUMNS_LAYOUT_PHONE;
+
         mRecipeListRecyclerView = rootView.findViewById(R.id.rv_recipe_list);
 
-        mLayoutManager = new GridLayoutManager(mContext, 1);
+        mLayoutManager = new GridLayoutManager(mContext, layoutColumns);
         mRecipeListRecyclerView.setLayoutManager(mLayoutManager);
         mRecipeListRecyclerView.setHasFixedSize(true);
 
@@ -104,9 +134,10 @@ public class RecipeListFragment extends Fragment
     /**
      * Recipe list item click listener
      *
-     * @param itemId Id of the clicked list item
+     * @param position Id of the clicked list item
      */
     @Override
-    public void onClick(int itemId) {
+    public void onClick(int position) {
+        mRecipeClickListenerCallback.onRecipeSelected(position);
     }
 }

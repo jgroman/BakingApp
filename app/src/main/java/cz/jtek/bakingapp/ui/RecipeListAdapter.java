@@ -21,7 +21,7 @@ public class RecipeListAdapter
     private static final String TAG = RecipeListAdapter.class.getSimpleName();
 
     public interface RecipeListOnClickListener {
-        void onClick(int itemId);
+        void onClick(int position);
     }
 
     private Context mContext;

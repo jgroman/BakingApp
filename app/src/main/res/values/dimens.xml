@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Used for detecting current layout -->
+    <bool name="is_tablet_layout">false</bool>
 
     <!--
 Refer to App Widget Documentation for margin information
