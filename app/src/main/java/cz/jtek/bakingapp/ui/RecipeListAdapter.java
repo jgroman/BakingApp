@@ -14,8 +14,7 @@ import java.util.Locale;
 import cz.jtek.bakingapp.R;
 import cz.jtek.bakingapp.model.Recipe;
 
-public class RecipeListAdapter
-        extends RecyclerView.Adapter<RecipeListAdapter.RecipeListAdapterViewHolder> {
+public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.ViewHolder> {
 
     @SuppressWarnings("unused")
     private static final String TAG = RecipeListAdapter.class.getSimpleName();
@@ -35,7 +34,7 @@ public class RecipeListAdapter
         mClickListener = clickListener;
     }
 
-    public class RecipeListAdapterViewHolder extends RecyclerView.ViewHolder
+    public class ViewHolder extends RecyclerView.ViewHolder
         implements View.OnClickListener {
 
         final TextView mRecipeNameTextView;
@@ -45,9 +44,9 @@ public class RecipeListAdapter
          * View holder constructor
          * Sets member variables and attaches local OnClick listener when creating views
          *
-         * @param view View to be hold in holder
+         * @param view View to be held in holder
          */
-        RecipeListAdapterViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             mRecipeNameTextView = view.findViewById(R.id.tv_recipe_item_name);
             mRecipeServingsTextView = view.findViewById(R.id.tv_recipe_item_servings);
@@ -68,22 +67,20 @@ public class RecipeListAdapter
 
     @NonNull
     @Override
-    public RecipeListAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(mContext);
+    public RecipeListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.item_recipe_list, parent, false);
-        return new RecipeListAdapterViewHolder(view);
-
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecipeListAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.mRecipeNameTextView.setText(mRecipeList.get(position).getName());
 
         int servings = mRecipeList.get(position).getServings();
         if (servings > 0) {
             holder.mRecipeServingsTextView.setText(String.format(Locale.getDefault(),mContext.getString(R.string.recipe_servings) + ": %d",servings));
         }
-
     }
 
     @Override

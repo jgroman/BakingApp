@@ -24,6 +24,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,8 @@ import android.widget.ListView;
 import cz.jtek.bakingapp.R;
 import cz.jtek.bakingapp.model.Recipe;
 
-public class RecipeOverviewFragment extends Fragment {
+public class RecipeOverviewFragment extends Fragment
+        implements StepListAdapter.StepListOnClickListener {
 
     @SuppressWarnings("unused")
     private static final String TAG = RecipeOverviewFragment.class.getSimpleName();
@@ -73,15 +75,25 @@ public class RecipeOverviewFragment extends Fragment {
             }
         }
 
+        // Recipe ingredients list Recycler View
         RecyclerView ingredientsRecyclerView = rootView.findViewById(R.id.rv_recipe_ingredients);
         ingredientsRecyclerView.setHasFixedSize(true);
 
-        // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(mContext);
         ingredientsRecyclerView.setLayoutManager(mLayoutManager);
 
-        IngredientListAdapter adapter = new IngredientListAdapter(mRecipe.getIngredients());
-        ingredientsRecyclerView.setAdapter(adapter);
+        IngredientListAdapter ingredientAdapter = new IngredientListAdapter(mRecipe.getIngredients());
+        ingredientsRecyclerView.setAdapter(ingredientAdapter);
+
+        // Recipe steps list Recycler View
+        RecyclerView stepsRecyclerView = rootView.findViewById(R.id.rv_recipe_steps);
+        stepsRecyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager stepsLayoutManager = new LinearLayoutManager(mContext);
+        stepsRecyclerView.setLayoutManager(stepsLayoutManager);
+
+        StepListAdapter stepAdapter = new StepListAdapter(mRecipe.getSteps(), this);
+        stepsRecyclerView.setAdapter(stepAdapter);
 
         return rootView;
     }
@@ -92,5 +104,10 @@ public class RecipeOverviewFragment extends Fragment {
         outState.putParcelable(KEY_RECIPE, mRecipe);
 
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onClick(int position) {
+        Log.d(TAG, "onClick: step clicked " + position);
     }
 }

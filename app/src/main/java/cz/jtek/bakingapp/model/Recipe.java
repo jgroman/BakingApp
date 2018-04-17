@@ -157,7 +157,9 @@ public class Recipe implements Parcelable {
         }
     };
 
-
+    /**
+     *
+     */
     public static class Ingredient implements Parcelable {
 
         // JSON field string ids
@@ -246,6 +248,9 @@ public class Recipe implements Parcelable {
         };
     }
 
+    /**
+     *
+     */
     public static class Step implements Parcelable {
 
         // JSON field string ids

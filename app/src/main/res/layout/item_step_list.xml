@@ -23,19 +23,10 @@
     android:orientation="vertical"
     >
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_recipe_ingredients"
+    <TextView
+        android:id="@+id/tv_step_item_short_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
-    </android.support.v7.widget.RecyclerView>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_recipe_steps"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-    </android.support.v7.widget.RecyclerView>
+        />
 
 </LinearLayout>
-

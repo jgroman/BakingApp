@@ -34,7 +34,7 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
          * View holder constructor
          * Sets member variables and attaches local OnClick listener when creating views
          *
-         * @param view View to be hold in holder
+         * @param view View to be held in holder
          */
         ViewHolder(View view) {
             super(view);
