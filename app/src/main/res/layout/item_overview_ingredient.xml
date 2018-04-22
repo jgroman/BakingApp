@@ -20,12 +20,24 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     >
 
     <TextView
-        android:id="@+id/tv_step_item_short_description"
-        android:layout_width="match_parent"
+        android:id="@+id/tv_overview_ingredient_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/tv_overview_ingredient_measure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/tv_overview_ingredient_name"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
 

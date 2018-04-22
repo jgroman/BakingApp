@@ -6,4 +6,7 @@
 
     <string name="recipe_servings">Servings</string>
     <string name="not_available">N/A</string>
+
+    <string name="ingredients">Ingredients</string>
+    <string name="recipe_steps">Recipe Steps</string>
 </resources>

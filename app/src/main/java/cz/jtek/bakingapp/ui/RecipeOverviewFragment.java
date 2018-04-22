@@ -34,7 +34,7 @@ import cz.jtek.bakingapp.R;
 import cz.jtek.bakingapp.model.Recipe;
 
 public class RecipeOverviewFragment extends Fragment
-        implements StepListAdapter.StepListOnClickListener {
+        implements RecipeOverviewAdapter.RecipeOverviewOnClickListener {
 
     @SuppressWarnings("unused")
     private static final String TAG = RecipeOverviewFragment.class.getSimpleName();
@@ -75,25 +75,16 @@ public class RecipeOverviewFragment extends Fragment
             }
         }
 
-        // Recipe ingredients list Recycler View
-        RecyclerView ingredientsRecyclerView = rootView.findViewById(R.id.rv_recipe_ingredients);
-        ingredientsRecyclerView.setHasFixedSize(true);
+        // Recipe overview Recycler View
+        RecyclerView overviewRecyclerView = rootView.findViewById(R.id.rv_recipe_overview);
+        overviewRecyclerView.setHasFixedSize(true);
 
         mLayoutManager = new LinearLayoutManager(mContext);
-        ingredientsRecyclerView.setLayoutManager(mLayoutManager);
+        overviewRecyclerView.setLayoutManager(mLayoutManager);
 
-        IngredientListAdapter ingredientAdapter = new IngredientListAdapter(mRecipe.getIngredients());
-        ingredientsRecyclerView.setAdapter(ingredientAdapter);
+        RecipeOverviewAdapter overviewAdapter = new RecipeOverviewAdapter(mRecipe, this);
+        overviewRecyclerView.setAdapter(overviewAdapter);
 
-        // Recipe steps list Recycler View
-        RecyclerView stepsRecyclerView = rootView.findViewById(R.id.rv_recipe_steps);
-        stepsRecyclerView.setHasFixedSize(true);
-
-        RecyclerView.LayoutManager stepsLayoutManager = new LinearLayoutManager(mContext);
-        stepsRecyclerView.setLayoutManager(stepsLayoutManager);
-
-        StepListAdapter stepAdapter = new StepListAdapter(mRecipe.getSteps(), this);
-        stepsRecyclerView.setAdapter(stepAdapter);
 
         return rootView;
     }
@@ -107,7 +98,7 @@ public class RecipeOverviewFragment extends Fragment
     }
 
     @Override
-    public void onClick(int position) {
+    public void onStepClick(int position) {
         Log.d(TAG, "onClick: step clicked " + position);
     }
 }
