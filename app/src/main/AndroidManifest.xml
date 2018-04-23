@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
 
-        <!-- RecipeActivity - single recipe overview + step details -->
+        <!-- RecipeActivity - single recipe overview (+ step details in tablet layout) -->
         <activity
             android:name=".ui.RecipeActivity"
             android:parentActivityName=".ui.MainActivity"
@@ -39,6 +39,17 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MainActivity"
+                />
+        </activity>
+
+        <!-- StepActivity - single recipe step view, used only in phone layout  -->
+        <activity
+            android:name=".ui.StepActivity"
+            android:parentActivityName=".ui.RecipeActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.RecipeActivity"
                 />
         </activity>
 
