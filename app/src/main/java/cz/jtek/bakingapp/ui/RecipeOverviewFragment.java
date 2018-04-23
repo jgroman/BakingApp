@@ -39,6 +39,15 @@ public class RecipeOverviewFragment extends Fragment
     @SuppressWarnings("unused")
     private static final String TAG = RecipeOverviewFragment.class.getSimpleName();
 
+    // Custom click listener interface, must be implemented by container activity
+    public interface OnRecipeStepClickListener {
+        void onRecipeStepSelected(int position);
+    }
+
+    // This is a callback to onRecipeStepSelected in container activity
+    OnRecipeStepClickListener mRecipeStepClickListenerCallback;
+
+
     private Context mContext;
     private Recipe mRecipe;
 
@@ -48,6 +57,21 @@ public class RecipeOverviewFragment extends Fragment
     private static final String KEY_RECIPE = "recipe";
 
     public RecipeOverviewFragment() {}
+
+    // Overriding onAttach to make sure that the container activity has implemented the callback
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // This makes sure that the host activity has implemented the callback interface
+        // If not, it throws an exception
+        try {
+            mRecipeStepClickListenerCallback = (OnRecipeStepClickListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnRecipeStepClickListener");
+        }
+    }
 
     @Nullable
     @Override
@@ -99,6 +123,6 @@ public class RecipeOverviewFragment extends Fragment
 
     @Override
     public void onStepClick(int position) {
-        Log.d(TAG, "onClick: step clicked " + position);
+        mRecipeStepClickListenerCallback.onRecipeStepSelected(position);
     }
 }

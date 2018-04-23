@@ -18,11 +18,11 @@
 
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tv_overview_ingredient_header"
+    android:id="@+id/tv_overview_step_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:text="@string/ingredients"
+    android:text="@string/recipe_steps"
     android:textStyle="bold"
     />
 

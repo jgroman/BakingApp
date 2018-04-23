@@ -22,7 +22,8 @@ public class RecipeOverviewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     // View types
     private static final int VIEW_TYPE_INGREDIENT_HEADER = 1;
     private static final int VIEW_TYPE_INGREDIENT_ITEM = 2;
-    private static final int VIEW_TYPE_STEP_ITEM = 3;
+    private static final int VIEW_TYPE_STEP_HEADER = 3;
+    private static final int VIEW_TYPE_STEP_ITEM = 4;
 
 
     private Recipe mRecipe;
@@ -36,15 +37,13 @@ public class RecipeOverviewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         mClickListener = clickListener;
     }
 
-    public class IngredientHeaderViewHolder extends RecyclerView.ViewHolder {
-
-        IngredientHeaderViewHolder(View view) {
+    public static class HeaderViewHolder extends RecyclerView.ViewHolder {
+        HeaderViewHolder(View view) {
             super(view);
         }
     }
 
-
-    public class IngredientViewHolder extends RecyclerView.ViewHolder {
+    public static class IngredientViewHolder extends RecyclerView.ViewHolder {
 
         final TextView mIngredientQuantity;
         final TextView mIngredientMeasure;
@@ -70,7 +69,7 @@ public class RecipeOverviewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         @Override
         public void onClick(View view) {
-            int itemPos = getAdapterPosition() - mIngredientListSize - 1;
+            int itemPos = getAdapterPosition() - mIngredientListSize - 2;
             mClickListener.onStepClick(itemPos);
         }
     }
@@ -82,6 +81,9 @@ public class RecipeOverviewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         else if (position > 0 && position < mIngredientListSize + 1)
             return VIEW_TYPE_INGREDIENT_ITEM;
+
+        else if (position == mIngredientListSize + 1)
+            return VIEW_TYPE_STEP_HEADER;
 
         else
             return VIEW_TYPE_STEP_ITEM;
@@ -96,11 +98,15 @@ public class RecipeOverviewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         switch(viewType) {
             case VIEW_TYPE_INGREDIENT_HEADER:
                 view = inflater.inflate(R.layout.item_overview_ingredient_header, parent, false);
-                return new IngredientHeaderViewHolder(view);
+                return new HeaderViewHolder(view);
 
             case VIEW_TYPE_INGREDIENT_ITEM:
                 view = inflater.inflate(R.layout.item_overview_ingredient, parent, false);
                 return new IngredientViewHolder(view);
+
+            case VIEW_TYPE_STEP_HEADER:
+                view = inflater.inflate(R.layout.item_overview_step_header, parent, false);
+                return new HeaderViewHolder(view);
 
             case VIEW_TYPE_STEP_ITEM:
             default:
@@ -122,21 +128,17 @@ public class RecipeOverviewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
             case VIEW_TYPE_STEP_ITEM:
                 StepViewHolder stepViewHolder = (StepViewHolder) holder;
-                stepViewHolder.mStepShortDescription.setText(mRecipe.getSteps().get(position - mIngredientListSize - 1).getShortDescription());
+                stepViewHolder.mStepShortDescription.setText(mRecipe.getSteps().get(position - mIngredientListSize - 2).getShortDescription());
                 break;
 
             default:
                 break;
         }
-
     }
 
     @Override
     public int getItemCount() {
         if (mRecipe == null) { return 0; }
-        return mIngredientListSize + mRecipe.getSteps().size() + 1;
+        return mIngredientListSize + mRecipe.getSteps().size() + 2;
     }
-
-
-
 }
