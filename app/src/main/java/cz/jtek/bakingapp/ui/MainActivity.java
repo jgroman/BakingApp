@@ -40,6 +40,9 @@ import cz.jtek.bakingapp.utils.MockDataUtils;
 import cz.jtek.bakingapp.utils.NetworkUtils;
 import cz.jtek.bakingapp.utils.NetworkUtils.AsyncTaskResult;
 
+/**
+ * This activity displays complete list of available recipes using RecipeListFragment
+ */
 public class MainActivity extends AppCompatActivity
         implements RecipeListFragment.OnRecipeClickListener {
 
@@ -130,7 +133,7 @@ public class MainActivity extends AppCompatActivity
                         // Valid results received
                         mRecipeList = data.getResult();
 
-                        // Set recipe list as fragment argument
+                        // RecipeListFragment receives complete recipe list as an argument
                         Bundle fragmentBundle = new Bundle();
                         fragmentBundle.putParcelableArrayList(BUNDLE_RECIPE_LIST, mRecipeList);
 

@@ -94,8 +94,8 @@ public class RecipeOverviewFragment extends Fragment
         else {
             // Get recipe from passed arguments
             Bundle args = getArguments();
-            if (args != null && args.containsKey(MainActivity.EXTRA_RECIPE)) {
-                mRecipe = args.getParcelable(MainActivity.EXTRA_RECIPE);
+            if (args != null && args.containsKey(RecipeActivity.BUNDLE_RECIPE)) {
+                mRecipe = args.getParcelable(RecipeActivity.BUNDLE_RECIPE);
             }
         }
 

@@ -27,14 +27,31 @@
         android:id="@+id/pv_step_video"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         >
-
     </com.google.android.exoplayer2.ui.PlayerView>
+
+    <ImageView
+        android:id="@+id/iv_step_thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        />
+
+    <TextView
+        android:id="@+id/tv_step_no_preview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="@string/err_no_preview"
+        />
 
     <TextView
         android:id="@+id/tv_step_instruction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         />
 
 </LinearLayout>

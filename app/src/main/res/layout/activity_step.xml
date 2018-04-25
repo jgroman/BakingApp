@@ -16,58 +16,53 @@
      limitations under the License.
 -->
 
-<ScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     >
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_above="@id/step_navigation_buttons"
         >
-
         <!-- Step Fragment Container -->
         <FrameLayout
             android:id="@+id/step_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
+    </ScrollView>
 
-        <!-- Navigation buttons -->
-        <LinearLayout
-            android:layout_width="match_parent"
+    <!-- Navigation buttons at the bottom of the screen -->
+    <LinearLayout
+        android:id="@+id/step_navigation_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        >
+        <TextView
+            android:id="@+id/tv_step_navigation_prev"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="start"
-                tools:text="< Previous"
-                />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="end"
-                android:textAlignment="viewEnd"
-                tools:text="Next >"
-                />
-
-        </LinearLayout>
-
+            android:layout_weight="1"
+            android:layout_gravity="start"
+            tools:text="Previous"
+            android:text="Previous"
+            />
+        <TextView
+            android:id="@+id/tv_step_navigation_next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="end"
+            android:textAlignment="viewEnd"
+            tools:text="Next"
+            android:text="Next"
+            />
     </LinearLayout>
 
-
-
-</ScrollView>
-
-
-
-
+</RelativeLayout>
