@@ -14,4 +14,13 @@
     <!-- Single step view -->
     <string name="err_no_preview">No Preview Available</string>
 
+    <!-- Player strings -->
+    <string name="player_play">Play</string>
+    <string name="player_pause">Pause</string>
+    <string name="player_restart">Restart</string>
+
+    <!-- Notification -->
+    <string name="notification_title">Title</string>
+    <string name="notification_text">Text</string>
+
 </resources>

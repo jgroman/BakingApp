@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
+import android.webkit.MimeTypeMap;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -48,6 +49,21 @@ public class NetworkUtils {
         Request request = new Request.Builder().url(url).build();
         Response response = new OkHttpClient().newCall(request).execute();
         return response.body().string();
+    }
+
+    /**
+     * This method returns MIME type of file at given URL
+     * @param url File URL
+     * @return File MIME type
+     */
+    public static String getUrlMimeType(String url)
+    {
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (extension != null) {
+            MimeTypeMap mime = MimeTypeMap.getSingleton();
+            return mime.getMimeTypeFromExtension(extension);
+        }
+        return null;
     }
 
     /**

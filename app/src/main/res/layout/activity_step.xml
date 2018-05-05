@@ -23,18 +23,13 @@
     android:layout_height="match_parent"
     >
 
-    <ScrollView
+    <!-- Step Fragment Container -->
+    <FrameLayout
+        android:id="@+id/step_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/step_navigation_buttons"
-        >
-        <!-- Step Fragment Container -->
-        <FrameLayout
-            android:id="@+id/step_fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-    </ScrollView>
+        />
 
     <!-- Navigation buttons at the bottom of the screen -->
     <LinearLayout

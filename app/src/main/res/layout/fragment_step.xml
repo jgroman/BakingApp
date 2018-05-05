@@ -18,8 +18,9 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     >
 
@@ -27,31 +28,35 @@
         android:id="@+id/pv_step_video"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
-        >
-    </com.google.android.exoplayer2.ui.PlayerView>
+        app:resize_mode="fit"
+        android:visibility="gone"
+        />
 
     <ImageView
         android:id="@+id/iv_step_thumbnail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
+        android:visibility="gone"
         />
 
-    <TextView
-        android:id="@+id/tv_step_no_preview"
+    <ImageView
+        android:id="@+id/iv_step_no_preview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
+        android:layout_height="48dp"
+        android:layout_margin="16dp"
         android:gravity="center"
-        android:text="@string/err_no_preview"
+        android:src="@drawable/ic_format_list_numbered_black_24dp"
         />
 
-    <TextView
-        android:id="@+id/tv_step_instruction"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        />
+        >
+        <TextView
+            android:id="@+id/tv_step_instruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </ScrollView>
 
 </LinearLayout>
