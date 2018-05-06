@@ -4,9 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Button;
 
 import java.util.ArrayList;
 
@@ -24,6 +23,9 @@ public class StepActivity extends AppCompatActivity {
 
     private ArrayList<Step> mSteps;
     private int mCurrentStepId;
+
+    private Button mPrevNavButton;
+    private Button mNextNavButton;
 
     // Fragment bundle keys
     public static final String BUNDLE_STEP = "step";
@@ -70,31 +72,60 @@ public class StepActivity extends AppCompatActivity {
                 .add(R.id.step_fragment_container, stepFragment)
                 .commit();
 
-        // Set navigation click listeners
-        TextView navPrevious = findViewById(R.id.tv_step_navigation_prev);
-        navPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Navigate to previous step
-                if (mCurrentStepId > 0) {
-                    mCurrentStepId--;
-                    replaceStepFragment(mCurrentStepId);
-                }
+        // Set navigation buttons' click listeners
+        mPrevNavButton = findViewById(R.id.btn_step_nav_previous);
+        if (mPrevNavButton != null) {
+            // On first recipe step hide button
+            if (mCurrentStepId == 0) {
+                mPrevNavButton.setVisibility(View.INVISIBLE);
             }
-        });
 
-        TextView navNext = findViewById(R.id.tv_step_navigation_next);
-        navNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Navigate to next step
-                if (mCurrentStepId < mSteps.size() - 1) {
-                    mCurrentStepId++;
-                    replaceStepFragment(mCurrentStepId);
+            mPrevNavButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Navigate to previous step
+                    if (mCurrentStepId > 0) {
+                        mCurrentStepId--;
+                        replaceStepFragment(mCurrentStepId);
+                    }
+
+                    // Make sure Next button is visible
+                    mNextNavButton.setVisibility(View.VISIBLE);
+
+                    // On first recipe step hide button
+                    if (mCurrentStepId == 0) {
+                        mPrevNavButton.setVisibility(View.INVISIBLE);
+                    }
                 }
-            }
-        });
+            });
+        }
 
+        mNextNavButton = findViewById(R.id.btn_step_nav_next);
+        if (mNextNavButton != null) {
+            // On last recipe step hide button
+            if (mCurrentStepId == mSteps.size() - 1) {
+                mNextNavButton.setVisibility(View.INVISIBLE);
+            }
+
+            mNextNavButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Navigate to next step
+                    if (mCurrentStepId < mSteps.size() - 1) {
+                        mCurrentStepId++;
+                        replaceStepFragment(mCurrentStepId);
+                    }
+
+                    // Make sure Prev button is visible
+                    mPrevNavButton.setVisibility(View.VISIBLE);
+
+                    // On last recipe step hide button
+                    if (mCurrentStepId == mSteps.size() - 1) {
+                        mNextNavButton.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
+        }
     }
 
     @Override

@@ -16,36 +16,28 @@
      limitations under the License.
 -->
 
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     >
 
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/pv_step_video"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
         app:resize_mode="fit"
-        android:visibility="gone"
-        />
-
-    <com.google.android.exoplayer2.ui.PlayerControlView
-        android:id="@+id/pv_step_video_control"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
         app:show_timeout="0"
-        app:controller_layout_id="@layout/exo_playback_control_view_portrait"
+        android:visibility="gone"
         />
 
     <ImageView
         android:id="@+id/iv_step_thumbnail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/step_image"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
         android:visibility="gone"
         />
 
@@ -53,7 +45,6 @@
         android:id="@+id/iv_step_no_preview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/err_no_preview"
         android:gravity="center"
         android:src="@drawable/ic_format_list_numbered_black_64dp"
         />
@@ -62,27 +53,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_step_instruction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-            <TextView
-                android:id="@+id/tv_step_description_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="8dp"
-                android:textStyle="bold"
-                android:text="@string/step_description_title"
-                />
-            <TextView
-                android:id="@+id/tv_step_instruction"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                />
-        </LinearLayout>
+            />
     </ScrollView>
 
-</LinearLayout>
+
+</RelativeLayout>

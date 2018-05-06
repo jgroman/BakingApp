@@ -36,6 +36,7 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -57,6 +58,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
     private SimpleExoPlayer mExoPlayer;
     private PlayerView mPlayerView;
+    private PlayerControlView mPlayerControlView;
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
 
@@ -93,12 +95,17 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
         final View rootView = inflater.inflate(R.layout.fragment_step, container, false);
 
+        // Set description title
+        TextView titleTextView = rootView.findViewById(R.id.tv_step_description_title);
+        titleTextView.setText(mStep.getShortDescription());
+
         // Fill out step instruction
         TextView instructionsTextView = rootView.findViewById(R.id.tv_step_instruction);
         instructionsTextView.setText(mStep.getDescription());
 
         // Show video player or image view respectively
         mPlayerView = rootView.findViewById(R.id.pv_step_video);
+        mPlayerControlView = rootView.findViewById(R.id.pv_step_video_control);
         ImageView thumbnailView = rootView.findViewById(R.id.iv_step_thumbnail);
         ImageView noPreviewImageView = rootView.findViewById(R.id.iv_step_no_preview);
 
@@ -111,6 +118,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         // If there is video URL available, initialize ExoPlayer
         if (videoURL != null && videoURL.length() > 0) {
             mPlayerView.setVisibility(View.VISIBLE);
+            mPlayerControlView.setVisibility(View.VISIBLE);
 
             // Hide other views
             thumbnailView.setVisibility(View.GONE);
@@ -125,11 +133,12 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
             // Hide other views
             mPlayerView.setVisibility(View.GONE);
+            mPlayerControlView.setVisibility(View.GONE);
             noPreviewImageView.setVisibility(View.GONE);
 
             Picasso.get()
                     .load(thumbnailURL)
-                    .placeholder(R.drawable.ic_format_list_numbered_black_24dp)
+                    .placeholder(R.drawable.ic_format_list_numbered_black_64dp)
                     .into(thumbnailView);
         }
         // Otherwise show no preview placeholder
@@ -138,6 +147,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
             // Hide other views
             mPlayerView.setVisibility(View.GONE);
+            mPlayerControlView.setVisibility(View.GONE);
             thumbnailView.setVisibility(View.GONE);
 
         }
@@ -263,6 +273,12 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             // This is the MediaSource representing the media to be played
             MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                     .createMediaSource(mediaUri);
+
+            // Disable built-in player controls in PlayerView
+            mPlayerView.setUseController(false);
+
+            // Bind custom player control view
+            mPlayerControlView.setPlayer(mExoPlayer);
 
             mExoPlayer.prepare(videoSource);
             mExoPlayer.setPlayWhenReady(true);

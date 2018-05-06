@@ -13,6 +13,12 @@
 
     <!-- Single step view -->
     <string name="err_no_preview">No Preview Available</string>
+    <string name="step_description_title">Step description</string>
+    <string name="step_image">Step image</string>
+
+    <!-- Navigation buttons -->
+    <string name="nav_button_previous">Previous</string>
+    <string name="nav_button_next">Next</string>
 
     <!-- Player strings -->
     <string name="player_play">Play</string>
