@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:show_timeout="0"
-        app:controller_layout_id="@layout/exo_playback_control_view_portrait"
+        app:controller_layout_id="@layout/exo_playback_control_view_custom"
         />
 
     <ImageView

@@ -28,40 +28,27 @@
         android:id="@+id/step_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/step_navigation_buttons"
+        android:layout_alignParentTop="true"
         />
 
-    <!-- Navigation buttons at the bottom of the screen -->
-    <LinearLayout
-        android:id="@+id/step_navigation_buttons"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/btn_step_nav_previous"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        >
-        <Button
-            android:id="@+id/btn_step_nav_previous"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/nav_button_previous"
-            android:text="@string/nav_button_previous"
-            android:drawableLeft="@drawable/ic_chevron_left_black_24dp"
-            tools:text="@string/nav_button_previous"
-            />
+        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/nav_button_previous"
+        android:src="@drawable/ic_chevron_left_black_24dp"
+        />
 
-        <Button
-            android:id="@+id/btn_step_nav_next"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/nav_button_next"
-            android:text="@string/nav_button_next"
-            android:drawableRight="@drawable/ic_chevron_right_black_24dp"
-            android:src="@drawable/ic_chevron_right_black_24dp"
-            tools:text="@string/nav_button_next"
-            />
-
-    </LinearLayout>
+    <ImageButton
+        android:id="@+id/btn_step_nav_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/nav_button_next"
+        android:src="@drawable/ic_chevron_right_black_24dp"
+        />
 
 </RelativeLayout>

@@ -97,7 +97,9 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
         // Set description title
         TextView titleTextView = rootView.findViewById(R.id.tv_step_description_title);
-        titleTextView.setText(mStep.getShortDescription());
+        if (titleTextView != null) {
+            titleTextView.setText(mStep.getShortDescription());
+        }
 
         // Fill out step instruction
         TextView instructionsTextView = rootView.findViewById(R.id.tv_step_instruction);
@@ -118,7 +120,9 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         // If there is video URL available, initialize ExoPlayer
         if (videoURL != null && videoURL.length() > 0) {
             mPlayerView.setVisibility(View.VISIBLE);
-            mPlayerControlView.setVisibility(View.VISIBLE);
+            if (mPlayerControlView != null) {
+                mPlayerControlView.setVisibility(View.VISIBLE);
+            }
 
             // Hide other views
             thumbnailView.setVisibility(View.GONE);
@@ -132,9 +136,11 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             thumbnailView.setVisibility(View.VISIBLE);
 
             // Hide other views
-            mPlayerView.setVisibility(View.GONE);
-            mPlayerControlView.setVisibility(View.GONE);
             noPreviewImageView.setVisibility(View.GONE);
+            mPlayerView.setVisibility(View.GONE);
+            if (mPlayerControlView != null) {
+                mPlayerControlView.setVisibility(View.GONE);
+            }
 
             Picasso.get()
                     .load(thumbnailURL)
@@ -146,9 +152,11 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             noPreviewImageView.setVisibility(View.VISIBLE);
 
             // Hide other views
-            mPlayerView.setVisibility(View.GONE);
-            mPlayerControlView.setVisibility(View.GONE);
             thumbnailView.setVisibility(View.GONE);
+            mPlayerView.setVisibility(View.GONE);
+            if (mPlayerControlView != null) {
+                mPlayerControlView.setVisibility(View.GONE);
+            }
 
         }
         return rootView;
@@ -274,11 +282,14 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                     .createMediaSource(mediaUri);
 
-            // Disable built-in player controls in PlayerView
-            mPlayerView.setUseController(false);
+            // Init standalone PlayerControlView if it exists
+            if (mPlayerControlView != null) {
+                // Disable built-in player controls in PlayerView
+                mPlayerView.setUseController(false);
 
-            // Bind custom player control view
-            mPlayerControlView.setPlayer(mExoPlayer);
+                // Bind custom player control view
+                mPlayerControlView.setPlayer(mExoPlayer);
+            }
 
             mExoPlayer.prepare(videoSource);
             mExoPlayer.setPlayWhenReady(true);
