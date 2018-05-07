@@ -29,4 +29,7 @@
     <string name="notification_title">Title</string>
     <string name="notification_text">Text</string>
 
+    <!-- Widget -->
+    <string name="widget_no_recipe_selected">No recipe selected</string>
+
 </resources>

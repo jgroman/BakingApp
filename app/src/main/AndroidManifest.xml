@@ -62,7 +62,7 @@
         </receiver>
 
         <!-- Widget receiver -->
-        <receiver android:name=".BakingAppWidget">
+        <receiver android:name=".widget.BakingAppWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -71,6 +71,9 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/baking_app_widget_info" />
         </receiver>
+
+        <!-- Widget service -->
+        <service android:name=".widget.IngredientListService" />
 
     </application>
 
