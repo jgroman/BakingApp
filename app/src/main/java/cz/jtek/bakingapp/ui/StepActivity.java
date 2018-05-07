@@ -22,6 +22,7 @@ public class StepActivity extends AppCompatActivity {
     @SuppressWarnings("unused")
     private static final String TAG = StepActivity.class.getSimpleName();
 
+    private String mRecipeName;
     private ArrayList<Step> mSteps;
     private int mCurrentStepId;
 
@@ -32,6 +33,7 @@ public class StepActivity extends AppCompatActivity {
     public static final String BUNDLE_STEP = "step";
 
     // Instance state bundle keys
+    private static final String KEY_NAME = "name";
     private static final String KEY_STEP_LIST = "step-list";
     private static final String KEY_STEP_ID = "step-id";
 
@@ -40,30 +42,28 @@ public class StepActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(TAG, "onCreate: ");
-
         setContentView(R.layout.activity_step);
 
         if (savedInstanceState != null) {
-            // Retrieve list of steps and selected step id from savedInstanceState
+            // Retrieve savedInstanceState
+            mRecipeName = savedInstanceState.getString(KEY_NAME);
             mSteps = savedInstanceState.getParcelableArrayList(KEY_STEP_LIST);
             mCurrentStepId = savedInstanceState.getInt(KEY_STEP_ID);
-
-
         }
         else {
             Intent startingIntent = getIntent();
             if (startingIntent == null) { return; }
 
             // Retrieve intent extras
+            if (startingIntent.hasExtra(RecipeActivity.EXTRA_NAME)) {
+                mRecipeName = startingIntent.getStringExtra(RecipeActivity.EXTRA_NAME);
+            }
             if (startingIntent.hasExtra(RecipeActivity.EXTRA_STEPS)) {
                 mSteps = startingIntent.getParcelableArrayListExtra(RecipeActivity.EXTRA_STEPS);
             }
             if (startingIntent.hasExtra(RecipeActivity.EXTRA_STEP_ID)) {
                 mCurrentStepId = startingIntent.getIntExtra(RecipeActivity.EXTRA_STEP_ID, 0);
             }
-
-            // Set title
 
             // Create step fragment
             StepFragment stepFragment = new StepFragment();
@@ -77,9 +77,13 @@ public class StepActivity extends AppCompatActivity {
                     .commit();
         }
 
+        // Set title
+        if (mRecipeName != null) {
+            setTitle(mRecipeName);
+        }
+
         // Detecting landscape
         Boolean isLandscape = getResources().getBoolean(R.bool.is_landscape);
-        Log.d(TAG, "*** onCreate: landscape " + isLandscape);
         if (isLandscape) {
             hideSystemUI();
         }
@@ -143,6 +147,9 @@ public class StepActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        // Store recipe name
+        outState.putString(KEY_NAME, mRecipeName);
+
         // Store step list
         outState.putParcelableArrayList(KEY_STEP_LIST, mSteps);
 

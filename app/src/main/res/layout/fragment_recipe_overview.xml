@@ -16,6 +16,7 @@
      limitations under the License.
 -->
 
+<!-- This RecyclerView contains recipe ingredient list and recipe step list -->
 <android.support.v7.widget.RecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rv_recipe_overview"

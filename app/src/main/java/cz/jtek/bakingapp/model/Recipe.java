@@ -168,12 +168,12 @@ public class Recipe implements Parcelable {
         private static final String INGREDIENT = "ingredient";
 
         // Members
-        private int mQuantity;
+        private double mQuantity;
         private String mMeasure;
         private String mIngredient;
 
         // Getters & setters
-        public int getQuantity() { return mQuantity; }
+        public double getQuantity() { return mQuantity; }
         public void setQuantity(int quantity) { this.mQuantity = quantity; }
 
         public String getMeasure() { return mMeasure; }
@@ -189,7 +189,7 @@ public class Recipe implements Parcelable {
         private static Ingredient fromJson(JSONObject jsonObject) throws JSONException {
             Ingredient i = new Ingredient();
 
-            if (jsonObject.has(QUANTITY)) { i.mQuantity = jsonObject.getInt(QUANTITY); }
+            if (jsonObject.has(QUANTITY)) { i.mQuantity = jsonObject.getDouble(QUANTITY); }
 
             if (jsonObject.has(MEASURE)) { i.mMeasure = jsonObject.getString(MEASURE); }
 
@@ -222,14 +222,14 @@ public class Recipe implements Parcelable {
 
         @Override
         public void writeToParcel(Parcel parcel, int flags) {
-            parcel.writeInt(mQuantity);
+            parcel.writeDouble(mQuantity);
             parcel.writeString(mMeasure);
             parcel.writeString(mIngredient);
         }
 
         // Constructor from incoming Parcel
         private Ingredient(Parcel in) {
-            mQuantity = in.readInt();
+            mQuantity = in.readDouble();
             mMeasure = in.readString();
             mIngredient = in.readString();
         }

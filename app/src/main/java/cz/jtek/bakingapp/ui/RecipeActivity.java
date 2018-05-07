@@ -26,6 +26,7 @@ public class RecipeActivity extends AppCompatActivity
     private int mCurrentStepId;
 
     // Extras keys
+    static final String EXTRA_NAME = "name";
     static final String EXTRA_STEPS = "steps";
     static final String EXTRA_STEP_ID = "step-id";
 
@@ -56,6 +57,17 @@ public class RecipeActivity extends AppCompatActivity
 
             // No step selected
             mCurrentStepId = -1;
+
+            // Create recipe overview fragment
+            RecipeOverviewFragment overviewFragment = new RecipeOverviewFragment();
+            // RecipeOverviewFragment receives single Recipe object as an argument
+            Bundle fragmentBundle = new Bundle();
+            fragmentBundle.putParcelable(BUNDLE_RECIPE, mRecipe);
+
+            overviewFragment.setArguments(fragmentBundle);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.recipe_overview_fragment_container, overviewFragment)
+                    .commit();
         }
         else {
             // Retrieve state from savedInstanceState
@@ -63,21 +75,14 @@ public class RecipeActivity extends AppCompatActivity
             mCurrentStepId = savedInstanceState.getInt(KEY_STEP_ID);
         }
 
-        // Create recipe overview fragment
-        RecipeOverviewFragment overviewFragment = new RecipeOverviewFragment();
-        // RecipeOverviewFragment receives single Recipe object as an argument
-        Bundle fragmentBundle = new Bundle();
-        fragmentBundle.putParcelable(BUNDLE_RECIPE, mRecipe);
-
-        overviewFragment.setArguments(fragmentBundle);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.recipe_overview_fragment_container, overviewFragment)
-                .commit();
+        // Set title
+        if (mRecipe != null) {
+            setTitle(mRecipe.getName());
+        }
 
         if (mIsTabletLayout) {
             // Create step detail fragment
         }
-
 
     }
 
@@ -109,6 +114,7 @@ public class RecipeActivity extends AppCompatActivity
         else {
             // When using phone layout, start StepActivity
             Intent intent = new Intent(this, StepActivity.class);
+            intent.putExtra(EXTRA_NAME, mRecipe.getName());
             intent.putExtra(EXTRA_STEPS, mRecipe.getSteps());
             intent.putExtra(EXTRA_STEP_ID, position);
             startActivity(intent);

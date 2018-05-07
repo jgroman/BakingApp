@@ -24,5 +24,6 @@
     android:gravity="center_horizontal"
     android:text="@string/recipe_steps"
     android:textStyle="bold"
+    style="@android:style/TextAppearance.DeviceDefault.Medium"
+    android:layout_marginTop="16dp"
     />
-

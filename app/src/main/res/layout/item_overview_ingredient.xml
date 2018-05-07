@@ -23,18 +23,19 @@
     android:orientation="horizontal"
     >
 
+    <!-- Ingredient quantity and measure -->
     <TextView
         android:id="@+id/tv_overview_ingredient_quantity"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:gravity="center"
+        android:textStyle="italic"
         />
 
-    <TextView
-        android:id="@+id/tv_overview_ingredient_measure"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-
+    <!-- Ingredient name -->
     <TextView
         android:id="@+id/tv_overview_ingredient_name"
         android:layout_width="wrap_content"

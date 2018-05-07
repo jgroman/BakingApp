@@ -315,7 +315,10 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
      * Release ExoPlayer.
      */
     private void releasePlayer() {
-        mNotificationManager.cancelAll();
+        if (mNotificationManager != null) {
+            mNotificationManager.cancelAll();
+        }
+
         mExoPlayer.stop();
         mExoPlayer.release();
         mExoPlayer = null;
@@ -356,7 +359,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         }
 
         mMediaSession.setPlaybackState(mStateBuilder.build());
-        showNotification(mStateBuilder.build());
+        //showNotification(mStateBuilder.build());
     }
 
     @Override

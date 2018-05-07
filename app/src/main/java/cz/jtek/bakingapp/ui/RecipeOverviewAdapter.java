@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import cz.jtek.bakingapp.R;
 import cz.jtek.bakingapp.model.Recipe;
 
@@ -46,13 +48,11 @@ public class RecipeOverviewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public static class IngredientViewHolder extends RecyclerView.ViewHolder {
 
         final TextView mIngredientQuantity;
-        final TextView mIngredientMeasure;
         final TextView mIngredientName;
 
         IngredientViewHolder(View view) {
             super(view);
             mIngredientQuantity = view.findViewById(R.id.tv_overview_ingredient_quantity);
-            mIngredientMeasure = view.findViewById(R.id.tv_overview_ingredient_measure);
             mIngredientName = view.findViewById(R.id.tv_overview_ingredient_name);
         }
     }
@@ -120,9 +120,18 @@ public class RecipeOverviewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_INGREDIENT_ITEM:
+                String quantityString;
+                Double quantity = mRecipe.getIngredients().get(position - 1).getQuantity();
+                // Do not display trailing zeros on "integer" quantity
+                if (quantity % 1.0 != 0) {
+                    quantityString = String.format(Locale.getDefault(), "%s", quantity);
+                }
+                else {
+                    quantityString = String.format(Locale.getDefault(), "%.0f", quantity);
+                }
+
                 IngredientViewHolder ingredientViewHolder = (IngredientViewHolder) holder;
-                ingredientViewHolder.mIngredientQuantity.setText(Integer.toString(mRecipe.getIngredients().get(position - 1).getQuantity()));
-                ingredientViewHolder.mIngredientMeasure.setText(mRecipe.getIngredients().get(position - 1).getMeasure());
+                ingredientViewHolder.mIngredientQuantity.setText(quantityString + " " + mRecipe.getIngredients().get(position - 1).getMeasure());
                 ingredientViewHolder.mIngredientName.setText(mRecipe.getIngredients().get(position - 1).getIngredient());
                 break;
 

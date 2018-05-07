@@ -21,8 +21,11 @@
     android:id="@+id/tv_overview_ingredient_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
     android:gravity="center_horizontal"
     android:text="@string/ingredients"
     android:textStyle="bold"
+    style="@android:style/TextAppearance.DeviceDefault.Medium"
     />
 
