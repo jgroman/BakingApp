@@ -15,6 +15,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.media.app.NotificationCompat.MediaStyle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +77,8 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
         super.onCreateView(inflater, container, savedInstanceState);
 
+        Log.d(TAG, "onCreateView: ");
+
         Activity activity = getActivity();
         if (activity == null) { return null; }
 
@@ -83,6 +86,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
         if (savedInstanceState != null) {
             // Restoring step from saved instance state
+            Log.d(TAG, "onCreateView: restoring mStep");
             mStep = savedInstanceState.getParcelable(KEY_STEP);
         }
         else {
@@ -119,6 +123,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
         // If there is video URL available, initialize ExoPlayer
         if (videoURL != null && videoURL.length() > 0) {
+            // Make sure player and controls are visible
             mPlayerView.setVisibility(View.VISIBLE);
             if (mPlayerControlView != null) {
                 mPlayerControlView.setVisibility(View.VISIBLE);
@@ -128,11 +133,13 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             thumbnailView.setVisibility(View.GONE);
             noPreviewImageView.setVisibility(View.GONE);
 
+            // Initialize player
             initializeMediaSession();
             initializePlayer(Uri.parse(videoURL));
         }
         // If there is thumbnail URL available, show image
         else if (thumbnailURL != null && thumbnailURL.length() > 0) {
+            // Make sure thumbnail view is visible
             thumbnailView.setVisibility(View.VISIBLE);
 
             // Hide other views
@@ -142,6 +149,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
                 mPlayerControlView.setVisibility(View.GONE);
             }
 
+            // Display thumbnail or placeholder
             Picasso.get()
                     .load(thumbnailURL)
                     .placeholder(R.drawable.ic_format_list_numbered_black_64dp)
@@ -149,6 +157,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         }
         // Otherwise show no preview placeholder
         else {
+            // Make sure "No preview" view is visible
             noPreviewImageView.setVisibility(View.VISIBLE);
 
             // Hide other views
@@ -157,9 +166,15 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             if (mPlayerControlView != null) {
                 mPlayerControlView.setVisibility(View.GONE);
             }
-
         }
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelable(KEY_STEP, mStep);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override

@@ -23,17 +23,29 @@
     android:layout_height="match_parent"
     >
 
+    <!-- Recipe step video -->
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/pv_step_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/tv_step_instruction"
+        android:layout_above="@id/pv_step_video_control"
         app:resize_mode="fit"
         app:controller_layout_id="@layout/exo_playback_control_view_custom"
         android:visibility="gone"
         />
 
+    <!-- Video player custom controls -->
+    <com.google.android.exoplayer2.ui.PlayerControlView
+        android:id="@+id/pv_step_video_control"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        app:show_timeout="0"
+        app:controller_layout_id="@layout/exo_playback_control_view_custom"
+        />
+
+    <!-- Recipe step thumbnail -->
     <ImageView
         android:id="@+id/iv_step_thumbnail"
         android:layout_width="match_parent"
@@ -43,6 +55,7 @@
         android:visibility="gone"
         />
 
+    <!-- "No preview" image placeholder -->
     <ImageView
         android:id="@+id/iv_step_no_preview"
         android:layout_width="match_parent"
@@ -50,14 +63,17 @@
         android:gravity="center"
         android:layout_alignParentTop="true"
         android:layout_above="@id/tv_step_instruction"
-        android:src="@drawable/ic_format_list_numbered_black_64dp" />
+        android:src="@drawable/ic_format_list_numbered_black_64dp"
+        />
 
+    <!-- Recipe step instruction -->
     <TextView
         android:id="@+id/tv_step_instruction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@id/pv_step_video_control"
+        android:layout_alignWithParentIfMissing="true"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:background="#CC000000"

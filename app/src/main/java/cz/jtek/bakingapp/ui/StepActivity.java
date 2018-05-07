@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -38,9 +39,19 @@ public class StepActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(TAG, "onCreate: ");
+
         setContentView(R.layout.activity_step);
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState != null) {
+            // Retrieve list of steps and selected step id from savedInstanceState
+            mSteps = savedInstanceState.getParcelableArrayList(KEY_STEP_LIST);
+            mCurrentStepId = savedInstanceState.getInt(KEY_STEP_ID);
+
+
+        }
+        else {
             Intent startingIntent = getIntent();
             if (startingIntent == null) { return; }
 
@@ -48,29 +59,30 @@ public class StepActivity extends AppCompatActivity {
             if (startingIntent.hasExtra(RecipeActivity.EXTRA_STEPS)) {
                 mSteps = startingIntent.getParcelableArrayListExtra(RecipeActivity.EXTRA_STEPS);
             }
-
             if (startingIntent.hasExtra(RecipeActivity.EXTRA_STEP_ID)) {
                 mCurrentStepId = startingIntent.getIntExtra(RecipeActivity.EXTRA_STEP_ID, 0);
             }
+
+            // Set title
+
+            // Create step fragment
+            StepFragment stepFragment = new StepFragment();
+            // StepFragment receives single Recipe.Step object as an argument
+            Bundle fragmentBundle = new Bundle();
+            fragmentBundle.putParcelable(BUNDLE_STEP, mSteps.get(mCurrentStepId));
+
+            stepFragment.setArguments(fragmentBundle);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.step_fragment_container, stepFragment)
+                    .commit();
         }
-        else {
-            // Retrieve list of steps and selected step id from savedInstanceState
-            mSteps = savedInstanceState.getParcelableArrayList(KEY_STEP_LIST);
-            mCurrentStepId = savedInstanceState.getInt(KEY_STEP_ID);
+
+        // Detecting landscape
+        Boolean isLandscape = getResources().getBoolean(R.bool.is_landscape);
+        Log.d(TAG, "*** onCreate: landscape " + isLandscape);
+        if (isLandscape) {
+            hideSystemUI();
         }
-
-        // Set title
-
-        // Create step fragment
-        StepFragment stepFragment = new StepFragment();
-        // StepFragment receives single Recipe.Step object as an argument
-        Bundle fragmentBundle = new Bundle();
-        fragmentBundle.putParcelable(BUNDLE_STEP, mSteps.get(mCurrentStepId));
-
-        stepFragment.setArguments(fragmentBundle);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.step_fragment_container, stepFragment)
-                .commit();
 
         // Set navigation buttons' click listeners
         mPrevNavButton = findViewById(R.id.btn_step_nav_previous);
@@ -157,7 +169,7 @@ public class StepActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
-            hideSystemUI();
+            //hideSystemUI();
         }
     }
 
