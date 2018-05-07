@@ -36,6 +36,7 @@ public class RecipeActivity extends AppCompatActivity
 
     // Fragment bundle keys
     public static final String BUNDLE_RECIPE = "recipe";
+    public static final String BUNDLE_STEP = "step";
 
 
     @Override
@@ -55,19 +56,47 @@ public class RecipeActivity extends AppCompatActivity
                 mRecipe = startingIntent.getParcelableExtra(MainActivity.EXTRA_RECIPE);
             }
 
-            // No step selected
-            mCurrentStepId = -1;
+            // Select first recipe step
+            mCurrentStepId = 0;
 
-            // Create recipe overview fragment
-            RecipeOverviewFragment overviewFragment = new RecipeOverviewFragment();
-            // RecipeOverviewFragment receives single Recipe object as an argument
-            Bundle fragmentBundle = new Bundle();
-            fragmentBundle.putParcelable(BUNDLE_RECIPE, mRecipe);
+            if (mIsTabletLayout) {
+                // Tablet layout
+                // Create recipe overview fragment
+                RecipeOverviewFragment overviewFragment = new RecipeOverviewFragment();
+                // RecipeOverviewFragment receives single Recipe object as an argument
+                Bundle overviewFragmentBundle = new Bundle();
+                overviewFragmentBundle.putParcelable(BUNDLE_RECIPE, mRecipe);
 
-            overviewFragment.setArguments(fragmentBundle);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.recipe_overview_fragment_container, overviewFragment)
-                    .commit();
+                overviewFragment.setArguments(overviewFragmentBundle);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.tablet_overview_fragment_container, overviewFragment)
+                        .commit();
+
+                // Create recipe step fragment
+                // Create step fragment
+                StepFragment stepFragment = new StepFragment();
+                // StepFragment receives single Recipe.Step object as an argument
+                Bundle stepFragmentBundle = new Bundle();
+                stepFragmentBundle.putParcelable(BUNDLE_STEP, mRecipe.getSteps().get(mCurrentStepId));
+
+                stepFragment.setArguments(stepFragmentBundle);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.tablet_step_fragment_container, stepFragment)
+                        .commit();
+            }
+            else {
+                // Phone layout
+                // Create recipe overview fragment
+                RecipeOverviewFragment overviewFragment = new RecipeOverviewFragment();
+                // RecipeOverviewFragment receives single Recipe object as an argument
+                Bundle fragmentBundle = new Bundle();
+                fragmentBundle.putParcelable(BUNDLE_RECIPE, mRecipe);
+
+                overviewFragment.setArguments(fragmentBundle);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.recipe_overview_fragment_container, overviewFragment)
+                        .commit();
+            }
         }
         else {
             // Retrieve state from savedInstanceState
@@ -80,15 +109,10 @@ public class RecipeActivity extends AppCompatActivity
             setTitle(mRecipe.getName());
         }
 
-        if (mIsTabletLayout) {
-            // Create step detail fragment
-        }
-
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log.d(TAG, "onSaveInstanceState: ");
         super.onSaveInstanceState(outState);
         // Store recipe
         outState.putParcelable(KEY_RECIPE, mRecipe);
@@ -99,17 +123,28 @@ public class RecipeActivity extends AppCompatActivity
 
     /**
      * Recipe step item click callback
-     * Bundles all recipe steps and selected step id into extras and starts StepActivity
+     * Bundles all recipe steps and selected step id into extras and starts StepActivity on phone.
+     * Replaces recipe step fragment on tablet.
      *
      * @param position Clicked step id
      */
     @Override
     public void onRecipeStepSelected(int position) {
-        Log.d(TAG, "onRecipeStepSelected: " + position);
 
         if (mIsTabletLayout) {
             // In tablet layout replace currently displayed step fragment
+            mCurrentStepId = position;
 
+            // Create step fragment
+            StepFragment stepFragment = new StepFragment();
+            // StepFragment receives single Recipe.Step object as an argument
+            Bundle fragmentBundle = new Bundle();
+            fragmentBundle.putParcelable(BUNDLE_STEP, mRecipe.getSteps().get(mCurrentStepId));
+
+            stepFragment.setArguments(fragmentBundle);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.tablet_step_fragment_container, stepFragment)
+                    .commit();
         }
         else {
             // When using phone layout, start StepActivity

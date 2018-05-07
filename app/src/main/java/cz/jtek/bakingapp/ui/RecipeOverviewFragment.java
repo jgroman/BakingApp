@@ -47,14 +47,14 @@ public class RecipeOverviewFragment extends Fragment
     // This is a callback to onRecipeStepSelected in container activity
     OnRecipeStepClickListener mRecipeStepClickListenerCallback;
 
-
     private Context mContext;
     private Recipe mRecipe;
-
     private RecyclerView.LayoutManager mLayoutManager;
+    private int mLastClickedStepPosition;
 
     // Instance State bundle keys
     private static final String KEY_RECIPE = "recipe";
+    private static final String KEY_STEP_POSITION = "step-position";
 
     public RecipeOverviewFragment() {}
 
@@ -88,8 +88,9 @@ public class RecipeOverviewFragment extends Fragment
         final View rootView = inflater.inflate(R.layout.fragment_recipe_overview, container, false);
 
         if (savedInstanceState != null) {
-            // Restoring recipe from saved instance state
+            // Restoring saved instance state
             mRecipe = savedInstanceState.getParcelable(KEY_RECIPE);
+            mLastClickedStepPosition = savedInstanceState.getInt(KEY_STEP_POSITION);
         }
         else {
             // Get recipe from passed arguments
@@ -97,7 +98,13 @@ public class RecipeOverviewFragment extends Fragment
             if (args != null && args.containsKey(RecipeActivity.BUNDLE_RECIPE)) {
                 mRecipe = args.getParcelable(RecipeActivity.BUNDLE_RECIPE);
             }
+
+            // Reset last clicked step position
+            mLastClickedStepPosition = 0;
         }
+
+        // Detecting tablet layout based on value from dimens.xml
+        Boolean isTabletLayout = getResources().getBoolean(R.bool.is_tablet_layout);
 
         // Recipe overview Recycler View
         RecyclerView overviewRecyclerView = rootView.findViewById(R.id.rv_recipe_overview);
@@ -106,9 +113,11 @@ public class RecipeOverviewFragment extends Fragment
         mLayoutManager = new LinearLayoutManager(mContext);
         overviewRecyclerView.setLayoutManager(mLayoutManager);
 
-        RecipeOverviewAdapter overviewAdapter = new RecipeOverviewAdapter(mRecipe, this);
+        // Do not highlight clicked steps on phone layout
+        RecipeOverviewAdapter overviewAdapter =
+                new RecipeOverviewAdapter(mRecipe, this,
+                        mLastClickedStepPosition, isTabletLayout);
         overviewRecyclerView.setAdapter(overviewAdapter);
-
 
         return rootView;
     }
@@ -118,11 +127,15 @@ public class RecipeOverviewFragment extends Fragment
         // Store recipe
         outState.putParcelable(KEY_RECIPE, mRecipe);
 
+        // Store last clicked step position
+        outState.putInt(KEY_STEP_POSITION, mLastClickedStepPosition);
+
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onStepClick(int position) {
+        mLastClickedStepPosition = position;
         mRecipeStepClickListenerCallback.onRecipeStepSelected(position);
     }
 }

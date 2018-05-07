@@ -30,13 +30,19 @@ public class RecipeOverviewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private Recipe mRecipe;
     private int mIngredientListSize;
+    private View mPreviousClickedView;
+    private int mActivePosition;
+    private Boolean mHighlightActive;
 
     private final RecipeOverviewOnClickListener mClickListener;
 
-    RecipeOverviewAdapter(Recipe recipe, RecipeOverviewOnClickListener clickListener) {
+    RecipeOverviewAdapter(Recipe recipe, RecipeOverviewOnClickListener clickListener, int activePosition, Boolean highlightActive) {
         mRecipe = recipe;
         mIngredientListSize = recipe.getIngredients().size();
         mClickListener = clickListener;
+        mActivePosition = activePosition;
+        mHighlightActive = highlightActive;
+        mPreviousClickedView = null;
     }
 
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
@@ -64,12 +70,24 @@ public class RecipeOverviewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         StepViewHolder(View view) {
             super(view);
             mStepShortDescription = view.findViewById(R.id.tv_overview_step_short_description);
-            view.setOnClickListener(this);
+            mStepShortDescription.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             int itemPos = getAdapterPosition() - mIngredientListSize - 2;
+
+            // Restore previous clicked view default background
+            if (mPreviousClickedView != null) {
+                mPreviousClickedView.setBackgroundResource(R.drawable.border_step_default);
+            }
+            mPreviousClickedView = view;
+
+            // Change clicked step background
+            if (mHighlightActive) {
+                view.setBackgroundResource(R.drawable.border_step_active);
+            }
+
             mClickListener.onStepClick(itemPos);
         }
     }
@@ -138,6 +156,12 @@ public class RecipeOverviewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             case VIEW_TYPE_STEP_ITEM:
                 StepViewHolder stepViewHolder = (StepViewHolder) holder;
                 stepViewHolder.mStepShortDescription.setText(mRecipe.getSteps().get(position - mIngredientListSize - 2).getShortDescription());
+
+                // Change background of the active position
+                if (mHighlightActive && position == mActivePosition + mIngredientListSize + 2) {
+                    stepViewHolder.mStepShortDescription.setBackgroundResource(R.drawable.border_step_active);
+                    mPreviousClickedView = stepViewHolder.mStepShortDescription;
+                }
                 break;
 
             default:
