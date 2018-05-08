@@ -20,9 +20,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#09C"
+    android:background="#A0040404"
     android:padding="@dimen/widget_margin"
     >
+
+    <!-- Ingredient list title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_widget_ingredients_title"
+        android:text="@string/widget_ingredients_title"
+        android:textSize="18sp"
+        android:textColor="@color/colorWidgetTitle"
+        android:gravity="center"
+        android:textAllCaps="true"
+        >
+    </TextView>
 
     <!-- Ingredient list -->
     <ListView

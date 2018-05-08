@@ -1,14 +1,18 @@
 package cz.jtek.bakingapp.ui;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+
+import java.util.ArrayList;
 
 import cz.jtek.bakingapp.R;
 import cz.jtek.bakingapp.model.Recipe;
+import cz.jtek.bakingapp.provider.RecipeContract;
 
 /**
  * This activity displays recipe overview - ingredient list + step list using RecipeOverviewFragment
@@ -24,6 +28,8 @@ public class RecipeActivity extends AppCompatActivity
 
     private Recipe mRecipe;
     private int mCurrentStepId;
+
+    private UpdateIngredientProviderTask mUpdateTask;
 
     // Extras keys
     static final String EXTRA_NAME = "name";
@@ -97,6 +103,11 @@ public class RecipeActivity extends AppCompatActivity
                         .add(R.id.recipe_overview_fragment_container, overviewFragment)
                         .commit();
             }
+
+            // Store recipe ingredients into database in async task
+            mUpdateTask = new UpdateIngredientProviderTask(this);
+            mUpdateTask.execute(mRecipe);
+
         }
         else {
             // Retrieve state from savedInstanceState
@@ -109,6 +120,16 @@ public class RecipeActivity extends AppCompatActivity
             setTitle(mRecipe.getName());
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Prevent memory leaks when laving running async task
+        if (mUpdateTask != null && mUpdateTask.getStatus() == AsyncTask.Status.RUNNING) {
+            mUpdateTask.cancel(true);
+        }
     }
 
     @Override
@@ -153,6 +174,42 @@ public class RecipeActivity extends AppCompatActivity
             intent.putExtra(EXTRA_STEPS, mRecipe.getSteps());
             intent.putExtra(EXTRA_STEP_ID, position);
             startActivity(intent);
+        }
+    }
+
+    private class UpdateIngredientProviderTask extends AsyncTask<Recipe, Void, Void> {
+
+        private Context mContext;
+
+        UpdateIngredientProviderTask(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        protected Void doInBackground(Recipe... recipes) {
+
+            ArrayList<Recipe.Ingredient> ingredients = recipes[0].getIngredients();
+
+            int ingredientCount = ingredients.size();
+            ContentValues[] valuesArray = new ContentValues[ingredientCount];
+
+            for (int i = 0; i < ingredientCount; i++) {
+                ContentValues values = new ContentValues();
+
+                values.put(RecipeContract.IngredientEntry.COL_QUANTITY, ingredients.get(i).getQuantity());
+                values.put(RecipeContract.IngredientEntry.COL_MEASURE, ingredients.get(i).getMeasure());
+                values.put(RecipeContract.IngredientEntry.COL_INGREDIENT, ingredients.get(i).getIngredient());
+
+                valuesArray[i] = values;
+            }
+
+            // Delete all previous ingredients
+            mContext.getContentResolver().delete(RecipeContract.IngredientEntry.CONTENT_URI, null, null);
+
+            // Insert new ingredients into content provider
+            mContext.getContentResolver().bulkInsert(RecipeContract.IngredientEntry.CONTENT_URI, valuesArray);
+
+            return null;
         }
     }
 }

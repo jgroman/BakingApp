@@ -72,8 +72,11 @@
                 android:resource="@xml/baking_app_widget_info" />
         </receiver>
 
-        <!-- Widget service -->
-        <service android:name=".widget.IngredientListService" />
+        <!-- Widget remote views service -->
+        <service
+            android:name=".widget.IngredientListService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            />
 
         <!-- Widget ingredient list provider -->
         <provider

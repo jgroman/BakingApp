@@ -3,6 +3,7 @@ package cz.jtek.bakingapp.widget;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
 
 import cz.jtek.bakingapp.R;
@@ -15,13 +16,12 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
+        RemoteViews rvs = new RemoteViews(context.getPackageName(), R.layout.widget_ingredient_list);
 
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        Intent intent = new Intent(context, IngredientListService.class);
+        rvs.setRemoteAdapter(R.id.lv_widget_ingredients, intent);
+
+        appWidgetManager.updateAppWidget(appWidgetId, rvs);
     }
 
     @Override
