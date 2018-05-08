@@ -75,6 +75,13 @@
         <!-- Widget service -->
         <service android:name=".widget.IngredientListService" />
 
+        <!-- Widget ingredient list provider -->
+        <provider
+            android:name=".provider.RecipeContentProvider"
+            android:authorities="cz.jtek.bakingapp"
+            android:exported="true"
+            />
+
     </application>
 
 </manifest>
