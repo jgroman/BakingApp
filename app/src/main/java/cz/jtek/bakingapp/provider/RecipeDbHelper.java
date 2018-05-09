@@ -20,6 +20,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import cz.jtek.bakingapp.provider.RecipeContract.RecipeEntry;
 import cz.jtek.bakingapp.provider.RecipeContract.IngredientEntry;
 
 public class RecipeDbHelper extends SQLiteOpenHelper {
@@ -29,12 +30,23 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
     // Increment db version if changing db schema
     private static final int DB_VERSION = 1;
 
-    public RecipeDbHelper(Context context) {
+    RecipeDbHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+
+        // Create recipe table
+        final String SQL_CREATE_RECIPE_TABLE =
+                "CREATE TABLE " + RecipeEntry.TABLE_NAME + " (" +
+                        RecipeEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        RecipeEntry.COL_RECIPE_ID + " INTEGER NOT NULL, " +
+                        RecipeEntry.COL_NAME + " TEXT NOT NULL, " +
+                        RecipeEntry.COL_SERVINGS + " INTEGER NOT NULL, " +
+                        RecipeEntry.COL_IMAGE + " TEXT NOT NULL)";
+
+        sqLiteDatabase.execSQL(SQL_CREATE_RECIPE_TABLE);
 
         // Create ingredients table
         // It is used to hold currently selected recipe ingredients for app widget list view
@@ -50,7 +62,8 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        // On upgrade just recreate ingredient table
+        // On upgrade just recreate tables
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + RecipeEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + IngredientEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }

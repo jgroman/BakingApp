@@ -8,11 +8,9 @@ import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import java.util.ArrayList;
 import java.util.Locale;
 
 import cz.jtek.bakingapp.R;
-import cz.jtek.bakingapp.model.Recipe.Ingredient;
 import cz.jtek.bakingapp.provider.RecipeContract;
 
 import static cz.jtek.bakingapp.provider.RecipeContract.BASE_CONTENT_URI;
@@ -30,9 +28,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private Context mContext;
     private Cursor mCursor;
 
-    private ArrayList<Ingredient> ingredientList = new ArrayList<>();
-
-    public ListRemoteViewsFactory(Context appContext) {
+    ListRemoteViewsFactory(Context appContext) {
         mContext = appContext;
     }
 
@@ -87,7 +83,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         String measure = mCursor.getString(indexMeasure);
         String ingredient = mCursor.getString(indexIngredient);
 
-        RemoteViews rvs = new RemoteViews(mContext.getPackageName(), R.layout.item_ingredient_list_widget);
+        RemoteViews rvs = new RemoteViews(mContext.getPackageName(), R.layout.widget_ingredient_list_item);
 
         String quantityString;
         // Do not display trailing zeros on "integer" quantity

@@ -25,7 +25,19 @@ public class RecipeContract {
 
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
+    public static final String PATH_RECIPE = "recipe";
     public static final String PATH_INGREDIENTS = "ingredients";
+
+    public static final class RecipeEntry implements BaseColumns {
+
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_RECIPE).build();
+
+        public static final String TABLE_NAME = "recipe";
+        public static final String COL_RECIPE_ID = "recipe_id";
+        public static final String COL_NAME = "name";
+        public static final String COL_SERVINGS = "servings";
+        public static final String COL_IMAGE = "image";
+    }
 
     public static final class IngredientEntry implements BaseColumns {
 

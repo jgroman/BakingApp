@@ -26,10 +26,10 @@
 
     <!-- Ingredient list title -->
     <TextView
+        android:id="@+id/tv_widget_ingredients_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_widget_ingredients_title"
-        android:text="@string/widget_ingredients_title"
+        android:text="@string/widget_title_ingredients"
         android:textSize="18sp"
         android:textColor="@color/colorWidgetTitle"
         android:gravity="center"

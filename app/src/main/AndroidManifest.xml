@@ -78,7 +78,7 @@
             android:permission="android.permission.BIND_REMOTEVIEWS"
             />
 
-        <!-- Widget ingredient list provider -->
+        <!-- Recipe data provider -->
         <provider
             android:name=".provider.RecipeContentProvider"
             android:authorities="cz.jtek.bakingapp"

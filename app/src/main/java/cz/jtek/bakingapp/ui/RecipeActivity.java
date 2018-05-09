@@ -1,13 +1,13 @@
 package cz.jtek.bakingapp.ui;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import cz.jtek.bakingapp.R;
@@ -29,7 +29,7 @@ public class RecipeActivity extends AppCompatActivity
     private Recipe mRecipe;
     private int mCurrentStepId;
 
-    private UpdateIngredientProviderTask mUpdateTask;
+    private UpdateRecipeDataProviderTask mUpdateTask;
 
     // Extras keys
     static final String EXTRA_NAME = "name";
@@ -105,7 +105,7 @@ public class RecipeActivity extends AppCompatActivity
             }
 
             // Store recipe ingredients into database in async task
-            mUpdateTask = new UpdateIngredientProviderTask(this);
+            mUpdateTask = new UpdateRecipeDataProviderTask(this);
             mUpdateTask.execute(mRecipe);
 
         }
@@ -177,18 +177,33 @@ public class RecipeActivity extends AppCompatActivity
         }
     }
 
-    private class UpdateIngredientProviderTask extends AsyncTask<Recipe, Void, Void> {
+    private static class UpdateRecipeDataProviderTask extends AsyncTask<Recipe, Void, Void> {
 
-        private Context mContext;
+        private WeakReference<RecipeActivity> activityReference;
 
-        UpdateIngredientProviderTask(Context context) {
-            mContext = context;
+        UpdateRecipeDataProviderTask(RecipeActivity context) {
+            activityReference = new WeakReference<>(context);
         }
 
         @Override
         protected Void doInBackground(Recipe... recipes) {
 
-            ArrayList<Recipe.Ingredient> ingredients = recipes[0].getIngredients();
+            // Process current recipe
+            Recipe currentRecipe = recipes[0];
+            ContentValues recipeValues = new ContentValues();
+            recipeValues.put(RecipeContract.RecipeEntry.COL_RECIPE_ID, currentRecipe.getId());
+            recipeValues.put(RecipeContract.RecipeEntry.COL_NAME, currentRecipe.getName());
+            recipeValues.put(RecipeContract.RecipeEntry.COL_SERVINGS, currentRecipe.getServings());
+            recipeValues.put(RecipeContract.RecipeEntry.COL_IMAGE, currentRecipe.getImage());
+
+            // Delete previous current recipe
+            activityReference.get().getContentResolver().delete(RecipeContract.RecipeEntry.CONTENT_URI, null, null);
+
+            // Store current recipe
+            activityReference.get().getContentResolver().insert(RecipeContract.RecipeEntry.CONTENT_URI, recipeValues);
+
+            // Process current ingredients
+            ArrayList<Recipe.Ingredient> ingredients = currentRecipe.getIngredients();
 
             int ingredientCount = ingredients.size();
             ContentValues[] valuesArray = new ContentValues[ingredientCount];
@@ -204,10 +219,10 @@ public class RecipeActivity extends AppCompatActivity
             }
 
             // Delete all previous ingredients
-            mContext.getContentResolver().delete(RecipeContract.IngredientEntry.CONTENT_URI, null, null);
+            activityReference.get().getContentResolver().delete(RecipeContract.IngredientEntry.CONTENT_URI, null, null);
 
-            // Insert new ingredients into content provider
-            mContext.getContentResolver().bulkInsert(RecipeContract.IngredientEntry.CONTENT_URI, valuesArray);
+            // Insert current ingredients into content provider
+            activityReference.get().getContentResolver().bulkInsert(RecipeContract.IngredientEntry.CONTENT_URI, valuesArray);
 
             return null;
         }

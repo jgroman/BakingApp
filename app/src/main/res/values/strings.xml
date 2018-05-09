@@ -31,6 +31,7 @@
 
     <!-- Widget -->
     <string name="widget_no_recipe_selected">No recipe selected</string>
-    <string name="widget_ingredients_title">Recipe ingredients</string>
+    <string name="widget_title_ingredients">Recipe ingredients</string>
+    <string name="widget_title_for">for</string>
 
 </resources>
