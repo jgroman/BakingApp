@@ -1,11 +1,14 @@
 package cz.jtek.bakingapp.ui;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 import cz.jtek.bakingapp.R;
 import cz.jtek.bakingapp.model.Recipe;
 import cz.jtek.bakingapp.provider.RecipeContract;
+import cz.jtek.bakingapp.widget.BakingAppWidgetProvider;
 
 /**
  * This activity displays recipe overview - ingredient list + step list using RecipeOverviewFragment
@@ -223,6 +227,15 @@ public class RecipeActivity extends AppCompatActivity
 
             // Insert current ingredients into content provider
             activityReference.get().getContentResolver().bulkInsert(RecipeContract.IngredientEntry.CONTENT_URI, valuesArray);
+
+            // Force appwidget update
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(activityReference.get());
+            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(activityReference.get(), BakingAppWidgetProvider.class));
+            //Trigger data update to handle the ListView widgets and force a data refresh
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.lv_widget_ingredients);
+            //Now update all widgets
+            Log.d(TAG, "doInBackground: updateAppWidget");
+            BakingAppWidgetProvider.updateAppWidget(activityReference.get(), appWidgetManager, 0);
 
             return null;
         }

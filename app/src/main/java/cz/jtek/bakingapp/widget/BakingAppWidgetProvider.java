@@ -1,17 +1,23 @@
 package cz.jtek.bakingapp.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import cz.jtek.bakingapp.R;
 import cz.jtek.bakingapp.provider.RecipeContract;
+import cz.jtek.bakingapp.ui.MainActivity;
+import cz.jtek.bakingapp.ui.RecipeActivity;
 
 import static cz.jtek.bakingapp.provider.RecipeContract.BASE_CONTENT_URI;
+import static cz.jtek.bakingapp.provider.RecipeContract.PATH_INGREDIENTS;
 import static cz.jtek.bakingapp.provider.RecipeContract.PATH_RECIPE;
 
 
@@ -23,8 +29,10 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
     @SuppressWarnings("unused")
     private static final String TAG = BakingAppWidgetProvider.class.getSimpleName();
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+    public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
+
+        RemoteViews rvs = new RemoteViews(context.getPackageName(), R.layout.widget_ingredient_list);
 
         String widgetTitle = context.getResources().getString(R.string.widget_title_ingredients);
 
@@ -47,18 +55,24 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
 
             if (name != null && name.length() > 0) {
                 widgetTitle = name + " " + context.getResources().getString(R.string.widget_title_for) + " " + Integer.toString(servings);
+                Log.d(TAG, "updateAppWidget: setting name " + widgetTitle);
             }
 
             cursor.close();
         }
 
-        RemoteViews rvs = new RemoteViews(context.getPackageName(), R.layout.widget_ingredient_list);
         // Set widget title
         rvs.setTextViewText(R.id.tv_widget_ingredients_title, widgetTitle);
 
         Intent intent = new Intent(context, IngredientListService.class);
-        // Set ingredient list adapter
         rvs.setRemoteAdapter(R.id.lv_widget_ingredients, intent);
+
+        // Set the MainActivity intent to launch when clicked
+        Intent appIntent = new Intent(context, MainActivity.class);
+        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        rvs.setPendingIntentTemplate(R.id.lv_widget_ingredients, appPendingIntent);
+        // Handle empty listview
+        rvs.setEmptyView(R.id.lv_widget_ingredients, R.id.tv_widget_no_items);
 
         appWidgetManager.updateAppWidget(appWidgetId, rvs);
     }

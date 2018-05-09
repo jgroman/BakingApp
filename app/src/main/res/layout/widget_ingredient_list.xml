@@ -41,7 +41,7 @@
     <ListView
         android:id="@+id/lv_widget_ingredients"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         >
     </ListView>
 
@@ -52,13 +52,11 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_margin="8dp"
-        android:background="#09C"
         android:contentDescription="@string/widget_no_recipe_selected"
         android:text="@string/widget_no_recipe_selected"
-        android:textColor="#ffffff"
+        android:textColor="@color/colorWidgetText"
         android:textSize="24sp"
         android:textStyle="bold|italic"
-        android:visibility="gone"
         />
 
 </LinearLayout>
