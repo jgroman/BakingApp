@@ -194,6 +194,11 @@ public class RecipeActivity extends AppCompatActivity
 
             // Process current recipe
             Recipe currentRecipe = recipes[0];
+
+            if (currentRecipe == null) {
+                return null;
+            }
+
             ContentValues recipeValues = new ContentValues();
             recipeValues.put(RecipeContract.RecipeEntry.COL_RECIPE_ID, currentRecipe.getId());
             recipeValues.put(RecipeContract.RecipeEntry.COL_NAME, currentRecipe.getName());
