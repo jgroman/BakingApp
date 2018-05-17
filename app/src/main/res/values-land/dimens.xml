@@ -3,4 +3,8 @@
     <!-- Used for detecting landscape layout -->
     <bool name="is_landscape">true</bool>
 
+    <!-- Widget -->
+    <dimen name="widget_margin">8dp</dimen>
+
+
 </resources>

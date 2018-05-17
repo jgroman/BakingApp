@@ -7,17 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import cz.jtek.bakingapp.R;
 import cz.jtek.bakingapp.provider.RecipeContract;
 import cz.jtek.bakingapp.ui.MainActivity;
-import cz.jtek.bakingapp.ui.RecipeActivity;
 
 import static cz.jtek.bakingapp.provider.RecipeContract.BASE_CONTENT_URI;
-import static cz.jtek.bakingapp.provider.RecipeContract.PATH_INGREDIENTS;
 import static cz.jtek.bakingapp.provider.RecipeContract.PATH_RECIPE;
 
 
@@ -54,8 +50,8 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
             int servings = cursor.getInt(indexServings);
 
             if (name != null && name.length() > 0) {
-                widgetTitle = name + " " + context.getResources().getString(R.string.widget_title_for) + " " + Integer.toString(servings);
-                Log.d(TAG, "updateAppWidget: setting name " + widgetTitle);
+                // Temporarily disabled for inconsistent behavior
+                // widgetTitle = name + " " + context.getResources().getString(R.string.widget_title_for) + " " + Integer.toString(servings);
             }
 
             cursor.close();

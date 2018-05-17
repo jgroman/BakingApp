@@ -3,4 +3,7 @@
     <!-- Used for detecting current layout -->
     <bool name="is_tablet_layout">true</bool>
 
+    <!-- Widget -->
+    <dimen name="widget_margin">8dp</dimen>
+
 </resources>

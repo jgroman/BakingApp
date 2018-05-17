@@ -36,7 +36,11 @@
         <TextView
             android:id="@+id/tv_recipe_item_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
             tools:text="Recipe Name"
             />
 
@@ -44,6 +48,9 @@
             android:id="@+id/tv_recipe_item_servings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:gravity="center"
+            android:textStyle="italic"
             tools:text="Recipe Servings"
             />
 
