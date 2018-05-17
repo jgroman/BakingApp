@@ -213,11 +213,11 @@ public class MainActivity extends AppCompatActivity
         public AsyncTaskResult<ArrayList<Recipe>> loadInBackground() {
             try {
                 // Example mock request used for debugging to avoid sending network queries
-                String jsonRecipes = MockDataUtils.getMockJson(getContext(), "baking");
+                //String jsonRecipes = MockDataUtils.getMockJson(getContext(), "baking");
 
                 // Load recipe list JSON
-                //URL recipesUrl = UdacityApi.buildRecipesUrl();
-                //String jsonRecipes = NetworkUtils.getResponseFromHttpUrl(recipesUrl);
+                URL recipesUrl = UdacityApi.buildRecipesUrl();
+                String jsonRecipes = NetworkUtils.getResponseFromHttpUrl(recipesUrl);
 
                 UdacityApi.UdacityJsonResult<ArrayList<Recipe>> recipeResult =
                         UdacityApi.getRecipesFromJson(jsonRecipes);
