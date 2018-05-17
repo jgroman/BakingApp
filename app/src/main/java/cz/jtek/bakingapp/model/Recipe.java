@@ -235,7 +235,7 @@ public class Recipe implements Parcelable {
         }
 
         // Parcelable creator
-        static final Parcelable.Creator<Ingredient> CREATOR
+        public static final Parcelable.Creator<Ingredient> CREATOR
                 = new Parcelable.Creator<Ingredient>() {
 
             public Ingredient createFromParcel(Parcel in) {
@@ -350,7 +350,7 @@ public class Recipe implements Parcelable {
         }
 
         // Parcelable creator
-        static final Parcelable.Creator<Step> CREATOR
+        public static final Parcelable.Creator<Step> CREATOR
                 = new Parcelable.Creator<Step>() {
 
             public Step createFromParcel(Parcel in) {
