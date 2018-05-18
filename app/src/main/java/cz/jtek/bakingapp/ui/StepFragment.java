@@ -146,9 +146,8 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
                 mVideoPosition = savedInstanceState.getLong(KEY_VIDEO_POSITION);
             }
 
-            // Initialize player
-            //initializeMediaSession();
-            //initializePlayer(Uri.parse(mVideoURL));
+            // Player is initialized in onResume method
+
         }
         // If there is thumbnail URL available, show image
         else if (thumbnailURL != null && thumbnailURL.length() > 0) {
