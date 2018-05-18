@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import android.support.v4.media.session.MediaSessionCompat;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -56,17 +57,23 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
     private Context mContext;
     private Step mStep;
+    private String mVideoURL;
 
     private SimpleExoPlayer mExoPlayer;
     private PlayerView mPlayerView;
     private PlayerControlView mPlayerControlView;
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
+    private long mVideoPosition;
+    private boolean mVideoPlayingState;
 
     private NotificationManager mNotificationManager;
 
     // Instance State bundle keys
     private static final String KEY_STEP = "step";
+    private static final String KEY_VIDEO_POSITION = "video-position";
+    private static final String KEY_VIDEO_STATE = "video-state";
+
 
     public StepFragment() {}
 
@@ -77,16 +84,16 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
         super.onCreateView(inflater, container, savedInstanceState);
 
-        Log.d(TAG, "onCreateView: ");
-
         Activity activity = getActivity();
         if (activity == null) { return null; }
 
         mContext = activity.getApplicationContext();
 
+        mVideoPlayingState = true;
+        mVideoPosition = C.TIME_UNSET;
+
         if (savedInstanceState != null) {
             // Restoring step from saved instance state
-            Log.d(TAG, "onCreateView: restoring mStep");
             mStep = savedInstanceState.getParcelable(KEY_STEP);
         }
         else {
@@ -115,14 +122,14 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         ImageView thumbnailView = rootView.findViewById(R.id.iv_step_thumbnail);
         ImageView noPreviewImageView = rootView.findViewById(R.id.iv_step_no_preview);
 
-        String videoURL = mStep.getVideoUrl();
+        mVideoURL = mStep.getVideoUrl();
         String thumbnailURL = mStep.getThumbnailUrl();
 
         // Check MIME types of source URLs
         //String mimeType
 
         // If there is video URL available, initialize ExoPlayer
-        if (videoURL != null && videoURL.length() > 0) {
+        if (mVideoURL != null && mVideoURL.length() > 0) {
             // Make sure player and controls are visible
             mPlayerView.setVisibility(View.VISIBLE);
             if (mPlayerControlView != null) {
@@ -133,9 +140,15 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             thumbnailView.setVisibility(View.GONE);
             noPreviewImageView.setVisibility(View.GONE);
 
+            // Restore player state and position if possible
+            if (savedInstanceState != null) {
+                mVideoPlayingState = savedInstanceState.getBoolean(KEY_VIDEO_STATE);
+                mVideoPosition = savedInstanceState.getLong(KEY_VIDEO_POSITION);
+            }
+
             // Initialize player
-            initializeMediaSession();
-            initializePlayer(Uri.parse(videoURL));
+            //initializeMediaSession();
+            //initializePlayer(Uri.parse(mVideoURL));
         }
         // If there is thumbnail URL available, show image
         else if (thumbnailURL != null && thumbnailURL.length() > 0) {
@@ -172,17 +185,35 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
+        // Store current recipe step
         outState.putParcelable(KEY_STEP, mStep);
+
+        if (mVideoURL != null && mVideoURL.length() > 0) {
+            outState.putBoolean(KEY_VIDEO_STATE, mVideoPlayingState);
+            outState.putLong(KEY_VIDEO_POSITION, mVideoPosition);
+        }
 
         super.onSaveInstanceState(outState);
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onPause() {
+        super.onPause();
+
         if (mExoPlayer != null) {
+            mVideoPosition = mExoPlayer.getCurrentPosition();
+            mVideoPlayingState = mExoPlayer.getPlayWhenReady();
             releasePlayer();
             mMediaSession.setActive(false);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mVideoURL != null && mVideoURL.length() > 0) {
+            initializeMediaSession();
+            initializePlayer(Uri.parse(mVideoURL));
         }
     }
 
@@ -307,7 +338,10 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             }
 
             mExoPlayer.prepare(videoSource);
-            mExoPlayer.setPlayWhenReady(true);
+            if (mVideoPosition != C.TIME_UNSET) {
+                mExoPlayer.seekTo(mVideoPosition);
+            }
+            mExoPlayer.setPlayWhenReady(mVideoPlayingState);
         }
     }
 
